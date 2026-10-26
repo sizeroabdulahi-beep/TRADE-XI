@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeVault · Pro Trading Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e14; --card:#111823; --elev:#16202e; --border:#1e2b3b;
+  --txt:#e8eef7; --txt2:#8a9bb0; --blue:#3b7cf5; --green:#16c784; --red:#ea3943; --mpesa:#00a651; --gold:#f5b342;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+button{font-family:inherit}
+input,select{font-family:inherit}
+
+/* ============ AUTH SCREEN ============ */
+.auth-screen{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%, #16202e 0%, #0a0e14 60%);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;overflow-y:auto}
+.auth-box{width:440px;max-width:100%;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 32px;box-shadow:0 40px 80px -20px #000}
+.auth-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.auth-brand .ico{width:48px;height:48px;background:linear-gradient(145deg,#3b7cf5,#1e5ad4);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;box-shadow:0 10px 24px -6px rgba(59,124,245,.5)}
+.auth-brand .nm{font-size:24px;font-weight:800;letter-spacing:-.6px}
+.auth-tag{text-align:center;color:var(--txt2);font-size:13px;margin-bottom:24px}
+.auth-tabs{display:flex;background:var(--bg);padding:4px;border-radius:14px;margin-bottom:22px}
+.auth-tab{flex:1;background:transparent;border:none;color:var(--txt2);font-size:13px;font-weight:600;padding:10px;border-radius:11px;cursor:pointer;transition:.15s}
+.auth-tab.active{background:var(--blue);color:#fff}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-left:4px}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--txt);outline:none;transition:.2s}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,124,245,.12)}
+.field input::placeholder{color:#3d4d60}
+.btn-main{width:100%;background:linear-gradient(145deg,#3b7cf5,#1e5ad4);border:none;color:#fff;font-weight:700;font-size:15px;padding:15px;border-radius:12px;cursor:pointer;transition:.2s;box-shadow:0 10px 22px -8px rgba(59,124,245,.5);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-main:hover{background:linear-gradient(145deg,#4d8aff,#2868e8);transform:translateY(-1px)}
+.btn-main:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--txt2);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-google{width:100%;background:#fff;border:none;color:#1a1a1a;font-weight:600;font-size:14px;padding:14px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s}
+.btn-google:hover{background:#f0f0f0;transform:translateY(-1px)}
+.btn-google img{width:18px;height:18px}
+.auth-foot{text-align:center;font-size:12px;color:var(--txt2);margin-top:18px}
+.auth-foot a{color:var(--blue);text-decoration:none;cursor:pointer}
+.auth-note{background:rgba(59,124,245,.08);border:1px solid rgba(59,124,245,.2);border-radius:10px;padding:10px 12px;font-size:11px;color:#9db8e0;margin-top:16px;line-height:1.5}
+
+/* ============ DASHBOARD ============ */
+.app{display:none;max-width:1500px;margin:0 auto;padding:16px}
+
+.topnav{display:flex;justify-content:space-between;align-items:center;padding:8px 4px 18px;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .ico{width:36px;height:36px;background:linear-gradient(145deg,#3b7cf5,#1e5ad4);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+.brand .nm{font-weight:800;font-size:19px;letter-spacing:-.4px}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-bal{background:var(--card);border:1px solid var(--border);border-radius:40px;padding:8px 16px;display:flex;align-items:center;gap:10px;font-size:14px}
+.nav-bal .lbl{color:var(--txt2);font-size:11px}
+.nav-bal .amt{font-weight:700;color:var(--green)}
+.icon-btn{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--txt2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;font-size:15px}
+.icon-btn:hover{color:var(--txt);border-color:#2f4055}
+.avatar{width:40px;height:40px;border-radius:40px;background:linear-gradient(135deg,#2b3e5a,#1a2a40);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;cursor:pointer;position:relative}
+.avatar-menu{position:absolute;top:50px;right:0;background:var(--elev);border:1px solid var(--border);border-radius:14px;padding:8px;min-width:210px;display:none;box-shadow:0 20px 40px -10px #000;z-index:100}
+.avatar-menu.open{display:block}
+.avatar-menu .uinfo{padding:10px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.avatar-menu .uinfo .n{font-weight:600;font-size:14px}
+.avatar-menu .uinfo .e{font-size:11px;color:var(--txt2)}
+.avatar-menu button{width:100%;background:transparent;border:none;color:var(--txt);text-align:left;padding:10px 12px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:10px}
+.avatar-menu button:hover{background:var(--card)}
+.avatar-menu button.danger{color:var(--red)}
+
+.grid{display:grid;grid-template-columns:270px 1fr 300px;gap:14px}
+@media(max-width:1150px){.grid{grid-template-columns:1fr 1fr}.right-col{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:14px}}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.right-col{grid-column:span 1;display:flex;flex-direction:column}.nav-bal .lbl{display:none}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-head h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--txt2)}
+.card-head i{color:var(--txt2);font-size:13px;cursor:pointer}
+
+/* watchlist */
+.market-tabs{display:flex;gap:4px;background:var(--bg);padding:4px;border-radius:30px;margin-bottom:12px}
+.mtab{flex:1;background:transparent;border:none;color:var(--txt2);font-size:11px;font-weight:600;padding:7px;border-radius:30px;cursor:pointer;transition:.15s}
+.mtab.active{background:var(--blue);color:#fff}
+.watch-item{display:flex;justify-content:space-between;align-items:center;padding:11px 9px;border-radius:12px;cursor:pointer;transition:.15s;border-left:3px solid transparent}
+.watch-item:hover{background:var(--elev)}
+.watch-item.active{background:var(--elev);border-left-color:var(--blue)}
+.wsym{font-weight:700;font-size:14px}
+.wnm{font-size:11px;color:var(--txt2);margin-top:2px}
+.wprice{text-align:right;font-weight:600;font-size:14px}
+.wchg{font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:flex-end;gap:3px}
+.up{color:var(--green)}.down{color:var(--red)}
+
+/* chart */
+.chart-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px}
+.pair-head{display:flex;align-items:center;gap:10px}
+.pair-ico{width:40px;height:40px;background:var(--elev);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--gold)}
+.pair-head h2{font-size:17px;font-weight:700}
+.pair-head .sub{font-size:11px;color:var(--txt2)}
+.time-tabs{display:flex;gap:3px;background:var(--bg);padding:3px;border-radius:30px}
+.ttab{background:transparent;border:none;color:var(--txt2);font-size:11px;font-weight:600;padding:6px 12px;border-radius:30px;cursor:pointer;transition:.15s}
+.ttab.active{background:var(--blue);color:#fff}
+.chart-view{background:var(--bg);border-radius:14px;padding:12px 8px 6px;border:1px solid var(--border);margin-bottom:12px}
+.candle-row{display:flex;align-items:flex-end;justify-content:space-between;height:170px;gap:3px;padding:6px 0}
+.candle{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:4px}
+.wick{width:2px;background:#3f5168;border-radius:2px;margin-bottom:1px}
+.cbody{width:9px;border-radius:2px}
+.cbody.green{background:var(--green);box-shadow:0 0 6px rgba(22,199,132,.25)}
+.cbody.red{background:var(--red);box-shadow:0 0 6px rgba(234,57,67,.2)}
+.chart-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--txt2);padding:6px 4px 0;border-top:1px solid var(--border);margin-top:4px}
+
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0 14px}
+.stat-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 13px}
+.stat-box .lbl{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.stat-box .val{font-weight:700;font-size:16px}
+.stat-box .val small{font-weight:400;font-size:11px;color:var(--txt2);margin-left:3px}
+
+.trade-btns{display:flex;gap:10px}
+.btn-trade{flex:1;border:none;padding:14px;border-radius:12px;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;transition:.18s}
+.btn-buy{background:var(--green);color:#0a0e14;box-shadow:0 8px 18px -6px rgba(22,199,132,.35)}
+.btn-buy:hover{background:#1dd48e;transform:translateY(-1px)}
+.btn-sell{background:var(--red);color:#fff;box-shadow:0 8px 18px -6px rgba(234,57,67,.3)}
+.btn-sell:hover{background:#f04b55;transform:translateY(-1px)}
+
+/* orderbook */
+.ob-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;font-weight:500;position:relative}
+.ob-row .px{font-weight:600;color:#b8c9e0;z-index:1}
+.ob-row .qty{color:var(--txt2);font-weight:400;z-index:1}
+.ask-px{color:var(--red)!important}
+.bid-px{color:var(--green)!important}
+.depth{position:absolute;right:0;top:0;height:100%;border-radius:4px;z-index:0}
+.depth-ask{background:rgba(234,57,67,.07)}
+.depth-bid{background:rgba(22,199,132,.09)}
+.spread-label{text-align:center;font-size:11px;color:var(--txt2);padding:6px 0;font-weight:500;letter-spacing:1px}
+
+/* balance */
+.bal-box{background:var(--elev);border-radius:14px;padding:14px;margin-top:12px}
+.bal-box .lbl{font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px}
+.bal-big{font-size:26px;font-weight:800;letter-spacing:-1px;margin:5px 0 6px;background:linear-gradient(135deg,#fff,#b0c8e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.bal-sub{display:flex;gap:14px;font-size:11px;color:var(--txt2);flex-wrap:wrap}
+.bal-sub i{margin-right:3px}
+.dep-btn{width:100%;margin-top:12px;background:var(--mpesa);border:none;color:#fff;font-weight:700;font-size:13px;padding:12px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s}
+.dep-btn:hover{background:#00b85a;transform:translateY(-1px)}
+.wd-btn{width:100%;margin-top:8px;background:var(--elev);border:1px solid var(--border);color:var(--txt);font-weight:600;font-size:13px;padding:11px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.18s}
+.wd-btn:hover{border-color:#2f4055;background:#1a2634}
+
+/* bottom */
+.bottom-row{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:720px){.bottom-row{grid-template-columns:1fr}}
+.trade-list{display:flex;flex-direction:column;gap:3px;max-height:150px;overflow-y:auto}
+.trade-line{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border)}
+.trade-line:last-child{border-bottom:none}
+.trade-side{font-weight:700;width:42px}
+.trade-side.b{color:var(--green)}
+.trade-side.s{color:var(--red)}
+
+/* ============ MODALS ============ */
+.modal-bg{position:fixed;inset:0;background:rgba(5,8,12,.85);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:22px;width:420px;max-width:100%;padding:26px;box-shadow:0 40px 80px -20px #000;max-height:92vh;overflow-y:auto}
+.modal h3{font-size:19px;font-weight:700;margin-bottom:4px}
+.modal .msub{font-size:12px;color:var(--txt2);margin-bottom:18px}
+.modal .close-x{float:right;background:transparent;border:none;color:var(--txt2);font-size:18px;cursor:pointer;margin-top:-4px}
+.modal .close-x:hover{color:var(--txt)}
+.amount-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.chip{background:var(--bg);border:1px solid var(--border);color:var(--txt);border-radius:10px;padding:10px 4px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s}
+.chip:hover,.chip.sel{background:rgba(59,124,245,.15);border-color:var(--blue);color:var(--blue)}
+.pay-summary{background:var(--bg);border-radius:12px;padding:14px;margin:14px 0;font-size:13px}
+.pay-summary .row{display:flex;justify-content:space-between;padding:5px 0;color:var(--txt2)}
+.pay-summary .row.total{border-top:1px solid var(--border);margin-top:6px;padding-top:10px;color:var(--txt);font-weight:700;font-size:15px}
+.confirm-note{font-size:11px;color:var(--txt2);margin-top:12px;line-height:1.5;text-align:center}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:16px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.success-ico{width:64px;height:64px;border-radius:50%;background:rgba(22,199,132,.12);border:2px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:30px;margin:6px auto 14px}
+.trade-type-row{display:flex;gap:8px;margin-bottom:16px}
+.ttype{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--txt2);border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+.ttype.buy.sel{background:rgba(22,199,132,.15);border-color:var(--green);color:var(--green)}
+.ttype.sell.sel{background:rgba(234,57,67,.15);border-color:var(--red);color:var(--red)}
+
+/* toast */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--elev);border:1px solid var(--border);color:var(--txt);padding:13px 24px;border-radius:40px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px;box-shadow:0 20px 40px -10px #000;z-index:3000;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap;max-width:92vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast i{color:var(--green);font-size:16px}
+.toast.err i{color:var(--red)}
+
+.notif-dot{width:8px;height:8px;background:var(--red);border-radius:50%;position:absolute;top:6px;right:6px;border:1.5px solid var(--card)}
+
+/* misc */
+.positive{color:var(--green)}
+.negative{color:var(--red)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#25313f;border-radius:10px}
+::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<!-- ================= AUTH ================= -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-box">
+    <div class="auth-brand">
+      <div class="ico"><i class="fas fa-chart-line"></i></div>
+      <div class="nm">TradeVault</div>
+    </div>
+    <div class="auth-tag">Trade crypto, forex & indices · M-Pesa powered</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin">Log in</button>
+      <button class="auth-tab" id="tabSignup">Sign up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div class="field">
+        <label>Mobile number</label>
+        <input type="tel" id="loginPhone" placeholder="+254 712 345 678">
+      </div>
+      <div class="field">
+        <label>M-Pesa PIN (4 digits)</label>
+        <input type="password" id="loginPin" placeholder="••••" maxlength="4">
+      </div>
+      <button class="btn-main" id="doLogin"><i class="fas fa-lock"></i> Log in</button>
+      <div class="divider">or</div>
+      <button class="btn-google" id="googleLogin">
+        <img src="https://www.google.com/favicon.ico" alt="G"> Continue with Google
+      </button>
+      <div class="auth-foot">New here? <a id="switchSignup">Create an account</a></div>
+      <div class="auth-note">Demo mode — use any number + any 4-digit PIN, or sign in with Google. No real money is involved.</div>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" style="display:none">
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" id="suName" placeholder="John Kamau">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="suEmail" placeholder="john@email.com">
+      </div>
+      <div class="field">
+        <label>M-Pesa mobile number</label>
+        <input type="tel" id="suPhone" placeholder="+254 712 345 678">
+      </div>
+      <div class="field">
+        <label>Create M-Pesa PIN (4 digits)</label>
+        <input type="password" id="suPin" placeholder="••••" maxlength="4">
+      </div>
+      <button class="btn-main" id="doSignup"><i class="fas fa-user-plus"></i> Create account</button>
+      <div class="divider">or</div>
+      <button class="btn-google" id="googleSignup">
+        <img src="https://www.google.com/favicon.ico" alt="G"> Sign up with Google
+      </button>
+      <div class="auth-foot">Already have an account? <a id="switchLogin">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div class="app" id="app">
+  <div class="topnav">
+    <div class="brand">
+      <div class="ico"><i class="fas fa-chart-line"></i></div>
+      <div class="nm">TradeVault</div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-bal">
+        <i class="fas fa-wallet" style="color:var(--txt2);font-size:12px"></i>
+        <div>
+          <div class="lbl">Balance</div>
+          <div class="amt" id="navBalance">$12,480.50</div>
+        </div>
+      </div>
+      <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+      <div style="position:relative">
+        <div class="avatar" id="avatarBtn">JD</div>
+        <div class="avatar-menu" id="avatarMenu">
+          <div class="uinfo">
+            <div class="n" id="menuName">John Doe</div>
+            <div class="e" id="menuEmail">john@email.com</div>
+          </div>
+          <button id="menuDeposit"><i class="fas fa-plus-circle"></i> Deposit</button>
+          <button id="menuWithdraw"><i class="fas fa-arrow-circle-down"></i> Withdraw</button>
+          <button id="menuHistory"><i class="fas fa-history"></i> Transaction history</button>
+          <button class="danger" id="doLogout"><i class="fas fa-sign-out-alt"></i> Log out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT -->
+    <div>
+      <div class="card">
+        <div class="card-head"><h3><i class="fas fa-star" style="color:var(--gold);margin-right:5px"></i> Watchlist</h3><i class="fas fa-sliders-h"></i></div>
+        <div class="market-tabs">
+          <button class="mtab active" data-cat="all">All</button>
+          <button class="mtab" data-cat="crypto">Crypto</button>
+          <button class="mtab" data-cat="forex">Forex</button>
+        </div>
+        <div id="watchlist"></div>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div>
+      <div class="card">
+        <div class="chart-top">
+          <div class="pair-head">
+            <div class="pair-ico"><i class="fab fa-bitcoin"></i></div>
+            <div>
+              <h2 id="pairTitle">BTC/USD</h2>
+              <div class="sub" id="pairSub">Bitcoin · Crypto</div>
+            </div>
+          </div>
+          <div class="time-tabs">
+            <button class="ttab active">1H</button>
+            <button class="ttab">4H</button>
+            <button class="ttab">1D</button>
+            <button class="ttab">1W</button>
+          </div>
+        </div>
+
+        <div class="chart-view">
+          <div class="candle-row" id="candleRow"></div>
+          <div class="chart-meta">
+            <span>24h Vol: <span id="volTxt">2.4B</span></span>
+            <span>24h Change: <span id="chgTxt" class="up">+3.24%</span></span>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-box"><div class="lbl">24h High</div><div class="val" id="highTxt">$68,420 <small>+1.2%</small></div></div>
+          <div class="stat-box"><div class="lbl">24h Low</div><div class="val" id="lowTxt">$66,180 <small>-0.8%</small></div></div>
+          <div class="stat-box"><div class="lbl">24h Volume</div><div class="val">$2.4B <small>BTC</small></div></div>
+        </div>
+
+        <div class="trade-btns">
+          <button class="btn-trade btn-buy" id="btnBuy"><i class="fas fa-arrow-up"></i> Buy</button>
+          <button class="btn-trade btn-sell" id="btnSell"><i class="fas fa-arrow-down"></i> Sell</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+      <div class="card">
+        <div class="card-head"><h3><i class="fas fa-list-ul" style="margin-right:5px"></i> Order Book</h3><i class="fas fa-sync-alt" id="refreshBook" style="font-size:12px"></i></div>
+        <div id="asksContainer"></div>
+        <div class="spread-label" id="spreadLabel">— SPREAD 0.50 —</div>
+        <div id="bidsContainer"></div>
+
+        <div class="bal-box">
+          <div class="lbl">Account Balance</div>
+          <div class="bal-big" id="balanceDisplay">$12,480.50</div>
+          <div class="bal-sub">
+            <span><i class="fab fa-bitcoin" style="color:var(--gold)"></i> <span id="btcBal">0.182</span> BTC</span>
+            <span><i class="fas fa-dollar-sign" style="color:var(--green)"></i> <span id="usdtBal">2,140</span> USDT</span>
+          </div>
+          <button class="dep-btn" id="btnDeposit"><i class="fas fa-plus-circle"></i> Deposit via M-Pesa</button>
+          <button class="wd-btn" id="btnWithdraw"><i class="fas fa-arrow-circle-down"></i> Withdraw to M-Pesa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="bottom-row">
+    <div class="card">
+      <div class="card-head"><h3><i class="fas fa-history" style="margin-right:5px"></i> Recent Trades</h3><i class="fas fa-chevron-right"></i></div>
+      <div class="trade-list" id="tradeList"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3><i class="fas fa-chart-pie"></i> Portfolio</h3><i class="fas fa-ellipsis-h"></i></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <div><div style="font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px">Total P&L</div><div style="font-size:21px;font-weight:800" class="positive" id="plTxt">+$1,240.32</div></div>
+        <div><div style="font-size:10px;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px">24h Change</div><div style="font-size:21px;font-weight:800" class="positive" id="chg24Txt">+3.8%</div></div>
+      </div>
+      <div style="display:flex;gap:7px;margin-top:14px;flex-wrap:wrap">
+        <span style="background:var(--elev);padding:5px 13px;border-radius:30px;font-size:11px">BTC 58%</span>
+        <span style="background:var(--elev);padding:5px 13px;border-radius:30px;font-size:11px">ETH 24%</span>
+        <span style="background:var(--elev);padding:5px 13px;border-radius:30px;font-size:11px">SOL 10%</span>
+        <span style="background:var(--elev);padding:5px 13px;border-radius:30px;font-size:11px">USDT 8%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODALS ================= -->
+
+<!-- Deposit modal -->
+<div class="modal-bg" id="depositModal">
+  <div class="modal">
+    <button class="close-x" data-close="depositModal"><i class="fas fa-times"></i></button>
+    <h3><i class="fas fa-mobile-alt" style="color:var(--mpesa)"></i> Deposit via M-Pesa</h3>
+    <div class="msub">Instant top-up · Safaricom STK push</div>
+
+    <div class="field">
+      <label
